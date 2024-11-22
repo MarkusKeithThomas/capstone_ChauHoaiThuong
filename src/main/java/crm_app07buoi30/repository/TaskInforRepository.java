@@ -6,7 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import crm_app07buoi30.config.MysqlConfig;
 import crm_app07buoi30.config.TaskInfor;
@@ -59,6 +61,7 @@ public class TaskInforRepository {
                 "u.fullname AS user_name, " +
                 "t.start_date AS task_start_date, " +
                 "t.end_date AS task_end_date, " +
+                "t.status_id AS status_id, "+
                 "s.name AS status_name " +
                 "FROM users u " +
                 "JOIN tasks t ON u.id = t.user_id " +
@@ -82,6 +85,7 @@ public class TaskInforRepository {
                 taskInfo.setTaskStartDate(rs.getDate("task_start_date"));
                 taskInfo.setTaskEndDate(rs.getDate("task_end_date"));
                 taskInfo.setStatusName(rs.getString("status_name"));
+                taskInfo.setStatusId(rs.getInt("status_id"));
                 taskInfos.add(taskInfo);
             }
         } catch (Exception e) {
@@ -183,6 +187,62 @@ public class TaskInforRepository {
            }
     	return rowUpdate;
     }
+    public Map<Integer, List<TaskInfor>> findOneByOneMemberByJobId(int jobId) {
+        Map<Integer, List<TaskInfor>> userTaskMap = new HashMap<>();
+
+        String query = "SELECT \n"
+        		+ "    t.id AS task_id, \n"
+        		+ "    j.id AS job_id,\n"
+        		+ "    j.name AS job_name,\n"
+        		+ "    t.name AS task_name, \n"
+        		+ "    t.start_date AS task_start_date, \n"
+        		+ "    t.end_date AS task_end_date,\n"
+        		+ "    t.status_id AS status_id,\n"
+        		+ "    u.id AS user_id,\n"
+        		+ "    u.fullname AS name_user,\n"
+        		+ "    u.avatar AS avatar_image,\n"
+        		+ "    s.name AS status_name \n"
+        		+ "FROM \n"
+        		+ "    users u \n"
+        		+ "JOIN \n"
+        		+ "    tasks t ON u.id = t.user_id \n"
+        		+ "JOIN \n"
+        		+ "    jobs j ON t.job_id = j.id \n"
+        		+ "JOIN \n"
+        		+ "    status s ON s.id = t.status_id\n"
+        		+ "WHERE j.id = ?";
+
+        try (Connection connection = MysqlConfig.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)){
+            preparedStatement.setInt(1, jobId); 
+        	ResultSet rs = preparedStatement.executeQuery(); 
+
+
+            while (rs.next()) {
+            	int userId = rs.getInt("user_id");
+            	
+                TaskInfor taskInfo = new TaskInfor();
+                taskInfo.setTaskId(rs.getInt("task_id"));
+                taskInfo.setJobId(rs.getInt("job_id"));
+                taskInfo.setJobName(rs.getString("job_name"));
+                taskInfo.setTaskName(rs.getString("task_name"));
+                taskInfo.setUserName(rs.getString("name_user"));
+                taskInfo.setTaskStartDate(rs.getDate("task_start_date"));
+                taskInfo.setTaskEndDate(rs.getDate("task_end_date"));
+                taskInfo.setStatusName(rs.getString("status_name"));
+                taskInfo.setAvatarImage(rs.getString("avatar_image"));
+                taskInfo.setStatusId(rs.getInt("status_id"));
+             // Thêm TaskInfor vào danh sách của userId
+                userTaskMap.putIfAbsent(userId, new ArrayList<>());
+                userTaskMap.get(userId).add(taskInfo);            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return userTaskMap;
+    }
+    
+    
+    
 
 
 }

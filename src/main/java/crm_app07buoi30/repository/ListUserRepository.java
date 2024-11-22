@@ -51,9 +51,9 @@ public class ListUserRepository {
            }
            return rowDeleted;
     }
-    public int insert(String email,String password,String fullName,int roldID,String phone) {
+    public int insert(String email,String password,String fullName,int roldID,String phone,String image) {
     	int rowInsert = 0;
-    	String query = "INSERT INTO users (email, password, fullname, role_id,phone) VALUES (?,?,?,?,?)";
+    	String query = "INSERT INTO users (email, password, fullname, role_id,phone,avatar) VALUES (?,?,?,?,?,?)";
     	try (Connection connection = MysqlConfig.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(query)) {
     			preparedStatement.setString(1, email);
@@ -61,6 +61,7 @@ public class ListUserRepository {
     			preparedStatement.setString(3, fullName);
     			preparedStatement.setInt(4, roldID);
     			preparedStatement.setString(5, phone);
+    			preparedStatement.setString(6, image);
     			rowInsert = preparedStatement.executeUpdate();
                System.out.println("Insert Data thanh cong.");
            } catch (Exception e) {

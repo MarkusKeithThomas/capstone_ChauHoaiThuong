@@ -10,6 +10,32 @@ public class TaskInfor {
     private Date taskStartDate;
     private Date taskEndDate;
     private String statusName;
+    private int statusId;
+    private String avatarImage;
+    private int jobId;
+    
+    
+    
+    
+    
+	public int getJobId() {
+		return jobId;
+	}
+	public void setJobId(int jobId) {
+		this.jobId = jobId;
+	}
+	public String getAvatarImage() {
+		return avatarImage;
+	}
+	public void setAvatarImage(String avatarImage) {
+		this.avatarImage = avatarImage;
+	}
+	public int getStatusId() {
+		return statusId;
+	}
+	public void setStatusId(int statusId) {
+		this.statusId = statusId;
+	}
 	public int getTaskId() {
 		return taskId;
 	}

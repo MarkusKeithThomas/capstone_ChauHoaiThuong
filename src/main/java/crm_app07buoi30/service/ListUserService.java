@@ -20,8 +20,8 @@ private ListUserRepository listUserRepository = new ListUserRepository();
 		 return count>0;
 	}
 	
-	public int insertMember(String email,String password,String fullName,int roldID, String phone ) {
-		return listUserRepository.insert(email, password, fullName, roldID,phone);
+	public int insertMember(String email,String password,String fullName,int roldID, String phone, String image ) {
+		return listUserRepository.insert(email, password, fullName, roldID,phone, image);
 	}
 	
 	public boolean checkingFilling(String email, String password, String fullName, String phone) {
@@ -54,6 +54,18 @@ private ListUserRepository listUserRepository = new ListUserRepository();
             return null; // Trả về null hoặc xử lý trường hợp không tìm thấy email trong cookie
         } else {
         	member = listUserRepository.findOneMember(emailFromCookie);
+    		return member;
+		}
+	}
+	public Member findOneMemberByEmail(String email) {
+		Member member = null;
+
+        // Kiểm tra nếu không tìm thấy email trong cookie
+        if (email == null) {
+            System.out.println("Không tìm thấy email trong cookie.");
+            return null; // Trả về null hoặc xử lý trường hợp không tìm thấy email trong cookie
+        } else {
+        	member = listUserRepository.findOneMember(email);
     		return member;
 		}
 	}

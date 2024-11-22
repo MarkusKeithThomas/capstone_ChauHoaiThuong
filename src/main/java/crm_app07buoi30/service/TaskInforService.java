@@ -2,6 +2,7 @@ package crm_app07buoi30.service;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -35,11 +36,18 @@ public class TaskInforService {
         
 		return taskInforRepository.findOneTaskInfo(emailFromCookie);
 	}
+	public List<TaskInfor> getOneManTasksByEmail(String email) {
+        
+		return taskInforRepository.findOneTaskInfo(email);
+	}
 	public TaskInfor getOneTaskById(int idTaks){
 		return taskInforRepository.findOneTaskInfoById(idTaks);
 	}
 	public int updateOneTaskById(int idTask,int idStatus) {
 		return taskInforRepository.findTaskToUpdate(idTask, idStatus);
+	}
+	public Map<Integer, List<TaskInfor>> getOneByOneMemberByJobId(int jobId){
+		return taskInforRepository.findOneByOneMemberByJobId(jobId);
 	}
 	
 	

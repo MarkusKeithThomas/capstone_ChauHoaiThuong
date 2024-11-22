@@ -22,22 +22,31 @@ public class LoginController extends HttpServlet{
 		String valueEmail = "";
 		String valuePassword = "";
 		boolean rememberme = false;
+		String  signOut = req.getParameter("signOut");
 		
-		 if (cookies != null) {		
-		for(Cookie item : cookies) {
-			String name = item.getName();
-			String value = item.getValue();
-			if(name.equals("email")) {
-				valueEmail = value;
-				rememberme = true;
+		if ("signOut".equals(signOut)) {
+	        // Thực hiện đăng xuất và chuyển hướng
+	        loginService.getLogOut(resp);
+	        resp.sendRedirect(req.getContextPath() + "/login"); // Chuyển hướng sau khi đăng xuất
+	        return; // Chặn xử lý tiếp
+	    }
+		if (cookies != null) {		
+			for(Cookie item : cookies) {
+				String name = item.getName();
+				String value = item.getValue();
+				if(name.equals("email")) {
+					valueEmail = value;
+					rememberme = true;
+				}
+				if (name.equals("password")) {
+					valuePassword = value;
+				}
+				req.setAttribute("email", valueEmail);
+				req.setAttribute("password", valuePassword);
 			}
-			if (name.equals("password")) {
-				valuePassword = value;
-			}
-			req.setAttribute("email", valueEmail);
-			req.setAttribute("password", valuePassword);
-		}
-		 }
+			 }
+		
+		
 		req.getRequestDispatcher("login.jsp").forward(req, resp);
 	}
 	

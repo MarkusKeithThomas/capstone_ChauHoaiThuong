@@ -34,9 +34,10 @@ public class UserAddSeverlet extends HttpServlet{
         String password = req.getParameter("password");
         String phone = req.getParameter("phone");
         String roleString = req.getParameter("role");
+        String imageAvatar = req.getParameter("iamge");
         int roleInt = Integer.parseInt(roleString);
 		if(listUserService.checkingFilling(email, password, fullname, phone)) {
-			listUserService.insertMember(email, password, fullname, roleInt, phone);
+			listUserService.insertMember(email, password, fullname, roleInt, phone,imageAvatar);
 			// Chuyển hướng tới trang danh sách người dùng
 	        resp.sendRedirect(req.getContextPath() + "/user-table");
 		} else {
