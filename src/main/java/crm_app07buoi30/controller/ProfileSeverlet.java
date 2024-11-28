@@ -60,6 +60,8 @@ public class ProfileSeverlet extends HttpServlet{
 		
 		// Chuyển tiếp đến trang JSP
 		req.getRequestDispatcher("profile.jsp").forward(req, resp);
+	    return; // Dừng xử lý tại đây
+
 	}
 
 }

@@ -63,5 +63,24 @@ public class RoleTableRepository {
             System.out.println("Lỗi kết nối CSDL: " + e.getMessage());			}		
 		return rowDelete;
 	}
+	public String findRoleByEmail(String email) {
+		String roleString = null;
+		String query = "SELECT u.id AS user_id,u.email, r.name FROM users u JOIN roles r ON u.role_id = r.id WHERE u.email = ?";
+        System.out.println("Bắt đầu lấy Quyen nguoi dung.");
+        try (Connection connection = MysqlConfig.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        	preparedStatement.setString(1, email);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+            	roleString = rs.getString("name");
+            }
+            System.out.println("Lấy roles thanh cong.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Lỗi kết nối CSDL: " + e.getMessage());
+        }
+		return roleString;
+	}
 
 }

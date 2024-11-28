@@ -11,12 +11,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import crm_app07buoi30.config.Roles;
 import crm_app07buoi30.service.ListUserService;
+import crm_app07buoi30.service.LoginService;
 import crm_app07buoi30.service.RoleTableService;
 
 @WebServlet(name = "userAddSeverlet",urlPatterns = "/user-add")
 public class UserAddSeverlet extends HttpServlet{
 	RoleTableService roleTableService = new RoleTableService();
 	ListUserService listUserService = new ListUserService();
+	LoginService loginService = new LoginService();
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -37,9 +39,14 @@ public class UserAddSeverlet extends HttpServlet{
         String imageAvatar = req.getParameter("iamge");
         int roleInt = Integer.parseInt(roleString);
 		if(listUserService.checkingFilling(email, password, fullname, phone)) {
-			listUserService.insertMember(email, password, fullname, roleInt, phone,imageAvatar);
-			// Chuyển hướng tới trang danh sách người dùng
-	        resp.sendRedirect(req.getContextPath() + "/user-table");
+			if (loginService.getExistedUserByEmail(email)) {
+				// Chuyển hướng tới trang danh sách người dùng
+		        resp.sendRedirect(req.getContextPath() + "/user-table");
+			} else {
+				listUserService.insertMember(email, password, fullname, roleInt, phone,imageAvatar);
+		        resp.sendRedirect(req.getContextPath() + "/user-table");
+			}
+			
 		} else {
 			System.out.println("Cần điền đầy đủ thông tin.");
 			doGet(req, resp);

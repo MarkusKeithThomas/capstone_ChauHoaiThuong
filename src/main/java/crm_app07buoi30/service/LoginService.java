@@ -1,6 +1,7 @@
 package crm_app07buoi30.service;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import crm_app07buoi30.config.Users;
@@ -23,29 +24,39 @@ public class LoginService {
 			return false;
 		}
 	}
-	public boolean getLogOut( HttpServletResponse resp) {
+	public boolean getLogOut( HttpServletResponse resp,HttpServletRequest req) {
 	    boolean resultSignOut = false;
+        String contextPath = req.getContextPath(); // Ví dụ: /crm_app07buoi30
+
 
 	    try {
 	        // Xóa cookie email và password
 	        Cookie cookieEmail = new Cookie("email", null);
 	        cookieEmail.setMaxAge(0); // Xóa ngay lập tức
-	        cookieEmail.setPath("/");
+	        cookieEmail.setPath(contextPath);
 
 	        Cookie cookiePassword = new Cookie("password", null);
 	        cookiePassword.setMaxAge(0); // Xóa ngay lập tức
-	        cookiePassword.setPath("/");
-
+	        cookiePassword.setPath(contextPath);
+	        
+	        Cookie cookieRole = new Cookie("role", null);
+	        cookieRole.setMaxAge(0);
+	        cookieRole.setPath(contextPath);
+	        
+	        
+	        resp.addCookie(cookieRole);
 	        resp.addCookie(cookieEmail);
 	        resp.addCookie(cookiePassword);
-
-
 	        resultSignOut = true; // Đăng xuất thành công
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
 
 	    return resultSignOut;
+	}
+	public boolean getExistedUserByEmail(String email) {
+		return loginRepository.findExistByEmail(email);
+		
 	}
 
 

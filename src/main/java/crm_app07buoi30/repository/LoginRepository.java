@@ -3,10 +3,6 @@ package crm_app07buoi30.repository;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.http.Cookie;
 
 import crm_app07buoi30.config.MysqlConfig;
 import crm_app07buoi30.config.Users;
@@ -44,5 +40,34 @@ public class LoginRepository {
         }
         return users;
 	}
+	public boolean findExistByEmail(String email) {
+    	boolean isExisted = false;
+    	String query = "SELECT u.email FROM users u WHERE u.email = ?";
+        
+
+        try (Connection connection = MysqlConfig.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+               // Đặt giá trị email từ cookie vào câu truy vấn
+               preparedStatement.setString(1, email);
+
+               ResultSet rs = preparedStatement.executeQuery();
+
+               // Nếu tìm thấy người dùng, thiết lập các thuộc tính của `member`
+               if (rs.next()) {
+                  String emailUserString = rs.getString("email");
+                  if (emailUserString != null || !emailUserString.isEmpty()) {
+					return !isExisted;
+				}
+               }
+           } catch (Exception e) {
+               e.printStackTrace();
+               System.out.println("Lỗi kết nối CSDL: " + e.getMessage());
+           }
+    	
+    	
+    	
+    	return isExisted;
+    }
 
 }

@@ -24,5 +24,8 @@ public class RoleTableService {
 	public int deleteRoles(int roleId) {
 		return repository.deleteRole(roleId);
 	}
+	public String getRoleByEmail(String email) {
+		return repository.findRoleByEmail(email);
+	}
 	
 }
