@@ -69,7 +69,7 @@ public class AuthenticationFilter implements Filter {
         if (Constant.ROLE_ADMIN.equals(userRole)) {
             hasAccess = true;
         } else if ("ROLE_MANAGER".equals(userRole)) {
-            Set<String> managerLinks = Set.of("/user-table", "/groupwork", "/profile");
+            Set<String> managerLinks = Set.of("/user-table","/user-add","user-details", "/groupwork", "/profile","/task","task-add");
             hasAccess = managerLinks.stream().anyMatch(requestURI::contains);
         } else if ("ROLE_USER".equals(userRole)) {
             Set<String> userLinks = Set.of("/profile", "/profile-edit");
